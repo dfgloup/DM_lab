@@ -1,22 +1,27 @@
 from typing import List
 
-
 def pda_function(s: str) -> bool:
+    state = 'q0'
     stack: List[str] = []
-    b_state = False
 
     for ch in s:
-        if ch == 'a':
-            if b_state:
+        if state == 'q0':
+            if ch == 'a':
+                stack.append('A')
+            elif ch == 'b':
+                if not stack:
+                    return False
+                stack.pop()
+                state = 'q1'
+            else:
                 return False
-            stack.append('A')
-        elif ch == 'b':
-            b_state = True
-            if not stack:
+
+        elif state == 'q1':
+            if ch == 'b':
+                if not stack:
+                    return False
+                stack.pop()
+            else:
                 return False
-            stack.pop()
-        else:
-            return False
 
-    return len(stack) == 0 #возвращает True только при пустом стеке
-
+    return len(stack) == 0
